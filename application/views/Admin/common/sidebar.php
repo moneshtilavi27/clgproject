@@ -69,6 +69,12 @@ date_default_timezone_set("Asia/Kolkata");
             </a>
           </li>
           <li>
+            <a href="<?php echo base_url('Admin/renumaration1');?>" id="valid1">
+            <i class="fas fa-wallet"></i>
+              <span>Remunration1</span>
+            </a>
+          </li>
+          <li>
             <a href="<?php echo base_url('Admin/notification');?>" id="valid1">
             <i class="fas fa-bell"></i>
               <span>Notification</span>

@@ -4,7 +4,7 @@ $notifi = $notification->result();
 <div class="page-content container-fluid">
     <div class="footer">
         <div class="d-flex justify-content-between">
-            <h2 class="text-left" style="font-weight: 600">ADD PAPER EVALUATION WORK</h2><a href="#"
+            <h2 class="text-left" style="font-weight: 600">ADD FACULTY WORK</h2><a href="#"
                 class="align-left"><i class="fa fa-power-off fa-2x"></i></a>
         </div>
         <p class="text-left" style="color: red;">Notification <marquee direction="left"><?php echo $notifi[0]->msg; ?>

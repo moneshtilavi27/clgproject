@@ -50,5 +50,18 @@ class Faculty_Operation extends CI_Model
     {
         $this->db->insert($table, $data);
     }
+
+    public function getWorkData($id)
+    {
+        $this->db->select('f.fid,f.faculty_id,w.year,w.modeOfExam,r.rolename,w.scriptDate,w.evaluvated_script,w.scheme,w.question_paper,w.add_comment,w.status,p.rate,s.subject,s.sub_code');
+            $this->db->from('faculty f');
+            $this->db->join('facultywork w', 'f.fid = w.fid');
+            $this->db->join('subject s', 's.sub_id = w.sub_id');
+            $this->db->join('pricerate p', 'w.roleid = p.roleid');
+            $this->db->join('role r', 'r.roleid = w.roleid AND r.roleid = p.roleid');
+           $this->db->where('f.fid',$id);
+           $query = $this->db->get();
+           return $query;
+    }
 }
 ?>

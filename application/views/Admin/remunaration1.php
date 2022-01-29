@@ -17,7 +17,7 @@ error_reporting(0);?>
                 <button id="alertclose" type="button" class="close" data-dismiss="alert">&times;</button>
                 <?php echo validation_errors(); ?>
             </div><?php }?>
-            <?php echo form_open_multipart('Admin/renumaration'); ?>
+            <?php echo form_open_multipart('Admin/renumaration1'); ?>
             <div class="row mt-3">
                 <div class="col-md-12">
                     <div class="row mt-2">
@@ -58,71 +58,37 @@ error_reporting(0);?>
                             <br /><button type="submit" name="search"
                                 class="btn btn-sm btn-primary col-md-12">Search</button>
                         </div>
-                        <div class="group-form col-md-2">
-                            <br /><button type="button" name="search" onclick="exportTableToExcel('example', 'Remunaration Report')" class="btn btn-sm btn-warning col-md-12"><i
-                                    class="fas fa-download"></i> Download</button>
-                        </div>
                     </div>
                 </div>
             </div>
             <hr />
-            <?php echo form_close();
-            $data = $remuneration->result()
-             ?>
-             <div class="col-md-3" class="text-center">
-                 <h1>Remunaration</h1>
-             </div>
-            <div class="row">
-                <div class="col-md-2 col-6">
-                    <img src="<?php echo $data[0]->fimage;?>" class="img-rounded profile-img img-fluid" alt="img" />
-                </div>
-                <table class="table table-sm table-bordered col-md-5" id="basicinfo">
-                    <tbody>
-                        <tr>
-                            <th style="width:40%;">Faculty Id : </th>
-                            <th> <?php echo $data[0]->faculty_id; ?></th>
-                        </tr>
-                        <tr>
-                            <th style="width:40%;">Faculty Name : </th>
-                            <th> <?php echo $data[0]->name; ?></th>
-                        </tr>
-                        <tr>
-                            <th style="width:40%;">Department : </th>
-                            <th> <?php echo $data[0]->department; ?></th>
-                        </tr>
-                        <tr>
-                            <th style="width:40%;">Year : </th>
-                            <th> <?php echo $data[0]->year."-".$data[0]->year+1; ?></th>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <hr />
             <div class="row mt-2">
                 <div class="table-responsive mt-2">
-                    <table class="table table-bordered table-striped text-center" border="1" id="example">
+                    <table class="table table-bordered table-striped text-center" border="1" id="dataTableExample2">
                         <thead>
                             <tr>
                                 <th style="width: 5%;">S.L</th>
+                                <th style="width: 10%;">Faculty</th>
+                                <th style="width: 10%;">Subject</th>
                                 <th style="width: 10%;">Roll</th>
                                 <th style="width: 15%;">Mode Of Exam</th>
-                                <th style="width: 15%;">Subject</th>
-                                <th style="width: 15%;">Subject code</th>
-                                <th style="width: 10%;">Script Rate</th>
-                                <th style="width: 10%;">Total Work</th>
-                                <th style="width: 15%;">Total Incentive</th>
+                                <th style="width: 10%;">Rate per script</th>
+                                <th style="width: 10%;">Total No. of scripts valued</th>
+                                <th style="width: 15%;">Amount</th>
+                                <th style="width: 15%;">Account no</th>
+                                <th style="width: 15%;">Signiture</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php $i=0;$tot=0;
-                            foreach ($remuneration->result() as $row)
+                            foreach($remuneration->result() as $row)
                         {$i++; ?>
                             <tr>
                                 <td><?php echo $i; ?></td>
+                                <td><?php echo $row->name; ?></td>
+                                <td><?php echo $row->subject." ".$row->sub_code; ?></td>
                                 <td><?php echo $row->rolename; ?></td>
                                 <td><?php echo $row->modeOfExam; ?></td>
-                                <td><?php echo $row->subject; ?></td>
-                                <td><?php echo $row->sub_code; ?></td>
                                 <?php if($row->rolename=="Evaluation"){?>
                                 <td><?php echo $row->rate;?> Rs</td>
                                 <?php }elseif($row->rolename=="Question Paper Set And Scheme"){?>
@@ -138,16 +104,11 @@ error_reporting(0);?>
                              echo "<br/> Scheam : 1"; ?></td>
                                 <?php } $totfis = $qp + $sch;}?>
                                 <td><?php echo number_format($totfis,2);?> Rs</td>
+                                <td><?php echo $row->bankacc; ?></td>
+                            <td>-</td>
                             </tr>
                             <?php $tot+=$totfis; } ?>
                         </tbody>
-                        <tfoot>
-                            <tr>
-                                <th colspan="6">.</th>
-                                <th style="width: 15%;">Total Incentive</th>
-                                <th style="width: 15%;"><?php echo number_format($tot,2); ?></th>
-                            </tr>
-                        </tfoot>
                     </table>
                 </div>
             </div>

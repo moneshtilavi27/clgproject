@@ -18,7 +18,6 @@ $profData = $profile->result();
                     <i class="fas fa-times"></i>
                 </div>
             </div>
-
             <div class="sidebar-menu">
                 <ul>
                     <li class="header-menu">
@@ -40,7 +39,7 @@ $profData = $profile->result();
                     <li class="sidebar-dropdown">
                         <a href="#">
                         <i class="fas fa-paste"></i>
-                            <span>Paper Evalution</span>
+                            <span>Role</span>
                         </a>
                         <div class="sidebar-submenu">
                             <ul>
@@ -49,40 +48,6 @@ $profData = $profile->result();
                                 </li>
                                 <li>
                                     <a href="<?php echo base_url('Faculty/viewPaperEvaluvation');?>" id="valid">View</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-
-                    <li class="sidebar-dropdown">
-                        <a href="#">
-                        <i class="fas fa-sticky-note"></i>
-                            <span>Question Paper Set</span>
-                        </a>
-                        <div class="sidebar-submenu">
-                            <ul>
-                                <li>
-                                    <a href="<?php echo base_url('Faculty/workdone');?>" id="valid">Add</a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo base_url('Faculty/workdone');?>" id="valid">View</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-
-                    <li class="sidebar-dropdown">
-                        <a href="#">
-                            <i class="fas fa-id-card"></i>
-                            <span>Schema</span>
-                        </a>
-                        <div class="sidebar-submenu">
-                            <ul>
-                                <li>
-                                    <a href="<?php echo base_url('Faculty/workdone');?>" id="valid">Add</a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo base_url('Faculty/workdone');?>" id="valid">View</a>
                                 </li>
                             </ul>
                         </div>

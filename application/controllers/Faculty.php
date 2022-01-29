@@ -62,29 +62,46 @@ class Faculty extends CI_Controller
             $this->form_validation->set_rules("role", "Role", "required");
             $this->form_validation->set_rules("subject", "subject", "required");
             //$this->form_validation->set_rules("subjectcode", "subjectcode", "required");
-            //$this->form_validation->set_rules("scriptdate", "scriptdate", "required");
-            $this->form_validation->set_rules("givenscript", "givenscript", "required");
-            $this->form_validation->set_rules("evaluvatedscript", "evaluvatedscript", "required");
+            $this->form_validation->set_rules("scriptdate", "scriptdate", "required");
+            // $this->form_validation->set_rules("givenscript", "givenscript", "required");
+            // $this->form_validation->set_rules("evaluvatedscript", "evaluvatedscript", "required");
             $this->form_validation->set_rules("comment", "comment", "required");
             //$this->form_validation->set_rules("qp", "qp", "required");
             // $this->form_validation->set_rules("scheme", "scheme", "required");
         if ($this->form_validation->run()) {
+            $qp = $this->uploadDoc("assets/images/questionpaper/",'qp');
+            $scheme = $this->uploadDoc("assets/images/document/schema/",'scheme');
             $data = array(
                 "wid" => "",
-                "fid" => "1",
+                "fid" => $userid,
                 "department" => $this->input->post("department"),
                 "year" => $this->input->post("year"),
                 "modeOfExam" => $this->input->post("modeOfExam"),
                 "roleid" => $this->input->post("role"),
                 "sub_id" => $this->input->post("subject"),
                 "scriptDate" => $this->input->post("scriptdate"),
-                "given_script" => $this->input->post("givenscript"),
-                "scheme"=>"scheme",
-                "question_paper"=>"question_paper",     
+                "given_script" => $this->input->post("givenscript"),    
                 "rate" => "30",
                 "add_comment" => $this->input->post("comment"),
-                "evaluvated_script" => $this->input->post("evaluvatedscript")
+                "evaluvated_script" => $this->input->post("evaluvatedscript"),
+                "status" => 0
             );
+             // setting target path to image
+             if($qp['raw_name']!="")
+             {
+                $image_path = $qp;
+             }else{
+                $image_path="-";
+             }
+             $data['question_paper'] = $image_path;
+             if($scheme['raw_name']!="")
+             {
+                $image_path1 = $scheme;
+             }else{
+                $image_path1="-";
+             }
+             $data['scheme'] = $image_path1;
+
               $this->faculty->data_Insertion("facultywork",$data);
                 echo "<script>alert('Item Successfully Updated');</script>";
                $this->load->view('Faculty/addEvaluvation',$prof);
@@ -95,14 +112,14 @@ class Faculty extends CI_Controller
          }
     }
 
-    // public function viewPaperEvaluvation()
-    // {
-    //     $userid = $this->session->userdata('user_id');
-    //     $data['profile'] = $this->admin->profile($userid);
-    //     $data['notification'] = $this->admin->getData("notification");
-    //     $data['evaluvation'] = $this->faculty->getData("evaluvation");
-    //     $this->load->view('Faculty/viewEvaluation',$data);
-    // }
+    public function viewPaperEvaluvation()
+    {
+        $userid = $this->session->userdata('user_id');
+        $data['profile'] = $this->admin->profile($userid);
+        $data['notification'] = $this->admin->getData("notification");
+        $data['evaluvation'] = $this->faculty->getWorkData($userid);
+        $this->load->view('Faculty/viewEvaluation',$data);
+    }
 
     public function profile()
     {
@@ -133,6 +150,19 @@ class Faculty extends CI_Controller
         $prof['notification'] = $this->admin->getData("notification");
         // load the methods of model
         $this->load->view('Faculty/report',$prof);
+    }
+    
+    public function uploadDoc($path,$name)
+    {
+        $config = [
+            'upload_path' =>'./assets/images/',
+            'allowed_types' => 'gif|jpg|jpeg|png|pdf|doc',
+        ];
+        $this->load->library('upload');
+        $this->upload->initialize($config);
+        $this->upload->do_Upload($name);
+        $image = $this->upload->data();
+        return base_url($path.$image['raw_name'].$image['file_ext']);
     }
 
     public function logout()

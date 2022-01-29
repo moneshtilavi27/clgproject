@@ -21,12 +21,12 @@ $notifi = $notification->result(); ?>
                 <thead>
                     <tr>
                         <th>Id</th>
-                        <th>Exam Type</th>
-                        <th>Subject</th>
-                        <th>Subject Code</th>
-                        <th>Script Given</th>
+                        <th>Year</th>
+                        <th>Mode Of Exam</th>
+                        <th>Course</th>
+                        <th>Role</th>
                         <th>Script Rate</th>
-                        <th>Script Evaluated</th>
+                        <th>Total Work</th>
                         <th>Total Amount</th>
                         <th>Comment</th>
                         <th>Status</th>
@@ -35,17 +35,29 @@ $notifi = $notification->result(); ?>
                 <tbody>
                     <?php $i=1;
                     foreach ($evaluvation->result() as $row)
-                { ?>
+                     { ?>
                     <tr>
-                        <td><?php echo $row->fid;?></td>
-                        <td><?php echo $row->typeExam;?></td>
-                        <td><?php echo $row->subject;?></td>
-                        <td><?php echo $row->subcode;?></td>
-                        <td><?php echo $row->scriptGiven;?></td>
+                        <td><?php echo $i++;?></td>
+                        <td><?php echo $row->year;?></td>
+                        <td><?php echo $row->modeOfExam;?></td>
+                        <td><?php echo $row->subject."(.".$row->sub_code.")";?></td>
+                        <td><?php echo $row->rolename;?></td>
+                        <?php if($row->rolename=="Evaluation"){?>
                         <td><?php echo $row->rate;?> Rs</td>
-                        <td><?php echo $row->scriptEvalved;?></td>
-                        <td><?php echo $row->rate*$row->scriptEvalved;?> Rs</td>
-                        <td><?php echo $row->comment;?></td>
+                        <?php }elseif($row->rolename=="Question Paper Set And Scheme"){?>
+                        <td><?php echo "QP Rate :".$row->rate."\n Scheam Rate :".$row->rate;?> Rs</td>
+                        <?php } if($row->rolename=="Evaluation"){?>
+                        <td><?php echo $row->evaluvated_script;
+                                 $totfis = $row->rate * $row->evaluvated_script;?>
+                        </td>
+                        <?php }elseif($row->rolename=="Question Paper Set And Scheme"){
+                            if($row->question_paper!=""){ $qp=($row->rate*1);?>
+                        <td><?php echo "QP Rate :".$qp;}
+                        if($row->scheme!=""){$sch=($row->rate*1);
+                             echo "\n Scheam Rate :".$sch; ?></td>
+                        <?php } $totfis = $qp + $sch;}?>
+                        <td><?php echo $totfis;?> Rs</td>
+                        <td><?php echo $row->add_comment;?></td>
                         <td>
                             <?php if($row->status==0){ echo "<h5>Pending</h5>";}else{ echo "<h5>Approved</h5>";};?>
                         </td>

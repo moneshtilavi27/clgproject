@@ -46,7 +46,7 @@
             <div class="group-form col-md-2">
                 <label class="form_label" for="company_name">Role </label>
                 <select class="form-control form-control-sm" onchange="getFilteredData();" name="role" id="role">
-                <option dissabled>Choose Option</option>
+                <option value="0">Choose Option</option>
                     <option value="1">Evaluation</option>
                     <option value="2">Question Paper Set And Scheme</option>
                 </select>

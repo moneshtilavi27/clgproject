@@ -60,7 +60,7 @@ class Admin extends CI_Controller
     public function getFacultyList()
     {
         $depart = $this->input->post("depart");
-        $data = $this->ad->getDataId("faculty","department", $depart);
+        $data = $this->ad->getFacultyAjax($depart);
         echo json_encode($data);
     }
 
@@ -97,7 +97,7 @@ class Admin extends CI_Controller
         if ($this->form_validation->run()) {
            $role[] = $this->input->post("role");
            $department = $this->input->post("department");
-           $fid = $this->input->post("facultylist");
+           echo $fid = $this->input->post("facultylist");
            $year = $this->input->post("year");
           // $data =  $this->ad->getRemuData($fid,$department,$year,$role);
         //     echo "<pre>";
@@ -114,6 +114,35 @@ class Admin extends CI_Controller
             $this->load->view('Admin/renumaration',$data);
         }
     }
+    public function renumaration1()
+    {
+        if(isset($_POST['search']))
+        {
+        $this->form_validation->set_rules("department", "Department", "required");
+        $this->form_validation->set_rules("facultylist", "Faculty Name", "required");
+        $this->form_validation->set_rules("year", "Year", "required");
+        $this->form_validation->set_rules("role[]", "Role", "required");
+        if ($this->form_validation->run()) {
+           $role[] = $this->input->post("role");
+           $department = $this->input->post("department");
+           echo $fid = $this->input->post("facultylist");
+           $year = $this->input->post("year");
+          // $data =  $this->ad->getRemuData($fid,$department,$year,$role);
+        //     echo "<pre>";
+        //    print_r($data->result());
+           $data['remuneration'] = $this->ad->getRemuData($fid,$department,$year,$role);
+           $this->load->view('Admin/remunaration1',$data);
+        }
+        else{
+            $data['remuneration'] = $this->ad->getRemuData("","","","");
+            $this->load->view('Admin/remunaration1',$data);
+        }
+        }else{
+            $data['remuneration'] = $this->ad->getRemuData("","","","");
+            $this->load->view('Admin/remunaration1',$data);
+        }
+    }
+    
     
     public function report()
     {
@@ -124,11 +153,6 @@ class Admin extends CI_Controller
     // insert faculty
     public function insertFaculty()
     {
-        $config = [
-            'upload_path' =>'./content/',
-            'allowed_types' => 'gif|jpg|jpeg|png',
-        ];
-        $this->load->library('upload', $config);
         if(isset($_POST['facultysubmit']))
         {
         $this->form_validation->set_rules("facultyId", "FacultyID", "required");
@@ -144,15 +168,6 @@ class Admin extends CI_Controller
         $this->form_validation->set_rules("acc", "Acount Number", "required");
         $this->form_validation->set_rules("ifsc", "ifsc", "required");
         if ($this->form_validation->run()) {
-                $this->upload->do_Upload('profile');
-                $profile = $this->upload->data();
-                $this->upload->do_Upload('adhar');
-                $adhar = $this->upload->data();
-                $this->upload->do_Upload('bank_doc');
-                $bank_doc = $this->upload->data();
-                $this->upload->do_Upload('pan');
-                $pan = $this->upload->data();
-
                 $data = array(
                     "fid" => "",
                     "faculty_id" => $this->input->post("facultyId"),
@@ -169,13 +184,13 @@ class Admin extends CI_Controller
                 );
 
                 // setting target path to image
-                $image_path = base_url("content/" . $profile['raw_name'] . $profile['file_ext']);
+                $image_path = $this->uploadDoc("assets/images/profile/",'profile');
                 $data['fimage'] = $image_path;
-                $image_path = base_url("content/" . $adhar['raw_name'] . $adhar['file_ext']);
+                $image_path = $this->uploadDoc("assets/images/document/adhar/",'adhar');
                 $doc['adhar'] = $image_path;
-                $image_path = base_url("content/" . $bank_doc['raw_name'] . $bank_doc['file_ext']);
+                $image_path = $this->uploadDoc("assets/images/document/bank/",'bank_doc');
                 $doc['bank_doc'] = $image_path;
-                $image_path = base_url("content/" . $pan['raw_name'] . $pan['file_ext']);
+                $image_path = $this->uploadDoc("assets/images/document/pan/",'pan');
                 $doc['pan'] = $image_path;
 
                 // User Creadential
@@ -204,6 +219,18 @@ class Admin extends CI_Controller
             $this->load->view('Admin/faculty_add');
          }
     }
+    public function uploadDoc($path,$name)
+    {
+        $config = [
+            'upload_path' => "./".$path,
+            'allowed_types' => 'gif|jpg|jpeg|png',
+        ];
+        $this->load->library('upload');
+        $this->upload->initialize($config);
+        $this->upload->do_Upload($name);
+        $image = $this->upload->data();
+        return base_url($path.$image['raw_name'].$image['file_ext']);
+    }
 
     public function profile($id)
     {   
@@ -220,9 +247,9 @@ class Admin extends CI_Controller
     public function approveWork($id)
     {
         $this->ad->approve($id);
-        $data['evaluvation'] = $this->ad->getDataAttribute("evaluvation","status","0");
-        $this->load->view('Admin/viewEvaluation',$data);
+        $this->viewPaperEvaluvation();
     }
+
     public function logout()
     {
         $this->session->sess_destroy();
